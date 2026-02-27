@@ -1,0 +1,17 @@
+com\aulaclick\AulaclickApplication.class
+com\aulaclick\repository\RecursoRepository.class
+com\aulaclick\repository\UsuarioRepository.class
+com\aulaclick\entity\Departamento.class
+com\aulaclick\entity\Recurso.class
+com\aulaclick\repository\DepartamentoRepository.class
+com\aulaclick\repository\ReservaRepository.class
+com\aulaclick\controller\RecursoController.class
+com\aulaclick\controller\ReservaController.class
+com\aulaclick\repository\RoleRepository.class
+com\aulaclick\entity\Usuario.class
+com\aulaclick\repository\AuditoriaRepository.class
+com\aulaclick\service\RecursoService.class
+com\aulaclick\entity\Auditoria.class
+com\aulaclick\service\ReservaService.class
+com\aulaclick\entity\Reserva.class
+com\aulaclick\entity\Role.class
