@@ -11,7 +11,6 @@ com\aulaclick\controller\ReservaController.class
 com\aulaclick\repository\RoleRepository.class
 com\aulaclick\entity\Usuario.class
 com\aulaclick\service\UsuarioService.class
-com\aulaclick\config\DataSeeder.class
 com\aulaclick\controller\UsuarioController.class
 com\aulaclick\repository\AuditoriaRepository.class
 com\aulaclick\service\RecursoService.class
