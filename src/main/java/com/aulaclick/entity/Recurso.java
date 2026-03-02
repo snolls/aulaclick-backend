@@ -24,8 +24,9 @@ public class Recurso {
     @Column(name = "nombre", nullable = false)
     private String nombre;
 
-    @Column(name = "tipo", nullable = false)
-    private String tipo;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_tipo_recurso", nullable = false)
+    private TipoRecurso tipoRecurso;
 
     @Column(name = "capacidad")
     private Integer capacidad;
@@ -36,8 +37,9 @@ public class Recurso {
     @Column(name = "estado", nullable = false)
     private String estado;
 
-    @Column(name = "equipamiento")
-    private String equipamiento;
+    @ManyToMany
+    @JoinTable(name = "Recurso_Equipamiento", joinColumns = @JoinColumn(name = "id_recurso"), inverseJoinColumns = @JoinColumn(name = "id_equipamiento"))
+    private List<Equipamiento> equipamientos;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_departamento", nullable = false)
