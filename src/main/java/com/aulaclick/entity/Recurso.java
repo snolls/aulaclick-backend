@@ -38,7 +38,7 @@ public class Recurso {
     private String estado;
 
     @ManyToMany
-    @JoinTable(name = "Recurso_Equipamiento", joinColumns = @JoinColumn(name = "id_recurso"), inverseJoinColumns = @JoinColumn(name = "id_equipamiento"))
+    @JoinTable(name = "recurso_equipamiento", joinColumns = @JoinColumn(name = "id_recurso"), inverseJoinColumns = @JoinColumn(name = "id_equipamiento"))
     private List<Equipamiento> equipamientos;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -43,27 +43,14 @@ public class RecursoController {
         recurso.setUbicacion(dto.getUbicacion());
         recurso.setEstado(dto.getEstado());
 
-        if (dto.getIdTipoRecurso() == null) {
-            throw new RuntimeException("El idTipoRecurso es requerido");
-        }
-        TipoRecurso tipo = tipoRecursoRepository.findById(dto.getIdTipoRecurso().longValue())
-                .orElseThrow(() -> new RuntimeException("Tipo de Recurso no encontrado"));
+        TipoRecurso tipo = tipoRecursoRepository.findById(dto.getIdTipoRecurso().longValue()).orElseThrow();
+        Departamento depto = departamentoRepository.findById(dto.getIdDepartamento().longValue()).orElseThrow();
+        List<Equipamiento> equip = equipamientoRepository.findAllById(
+                dto.getIdsEquipamiento() == null ? List.of()
+                        : dto.getIdsEquipamiento().stream().map(Integer::longValue).toList());
         recurso.setTipoRecurso(tipo);
-
-        if (dto.getIdDepartamento() == null) {
-            throw new RuntimeException("El idDepartamento es requerido");
-        }
-        Departamento departamento = departamentoRepository.findById(dto.getIdDepartamento().longValue())
-                .orElseThrow(() -> new RuntimeException("Departamento no encontrado"));
-        recurso.setDepartamento(departamento);
-
-        if (dto.getIdsEquipamiento() != null && !dto.getIdsEquipamiento().isEmpty()) {
-            List<Long> idsToLong = dto.getIdsEquipamiento().stream()
-                    .map(Integer::longValue)
-                    .toList();
-            List<Equipamiento> equipamientos = equipamientoRepository.findAllById(idsToLong);
-            recurso.setEquipamientos(equipamientos);
-        }
+        recurso.setDepartamento(depto);
+        recurso.setEquipamientos(equip);
 
         Recurso recursoGuardado = recursoService.save(recurso);
         return ResponseEntity.status(HttpStatus.CREATED).body(recursoGuardado);
