@@ -16,4 +16,8 @@ public class RecursoService {
     public List<Recurso> findAll() {
         return recursoRepository.findAll();
     }
+
+    public Recurso save(Recurso recurso) {
+        return recursoRepository.save(recurso);
+    }
 }
