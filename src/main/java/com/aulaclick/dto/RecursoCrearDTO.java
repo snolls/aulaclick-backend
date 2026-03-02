@@ -11,5 +11,6 @@ public class RecursoCrearDTO {
     private Integer capacidad;
     private String ubicacion;
     private String estado;
+    private String equipamiento;
     private Integer idDepartamento;
 }

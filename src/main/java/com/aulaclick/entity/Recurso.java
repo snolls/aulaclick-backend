@@ -36,6 +36,9 @@ public class Recurso {
     @Column(name = "estado", nullable = false)
     private String estado;
 
+    @Column(name = "equipamiento")
+    private String equipamiento;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_departamento", nullable = false)
     private Departamento departamento;

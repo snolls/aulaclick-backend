@@ -37,8 +37,12 @@ public class RecursoController {
         recurso.setCapacidad(dto.getCapacidad());
         recurso.setUbicacion(dto.getUbicacion());
         recurso.setEstado(dto.getEstado());
+        recurso.setEquipamiento(dto.getEquipamiento());
 
-        Departamento departamento = departamentoRepository.findById(Long.valueOf(dto.getIdDepartamento()))
+        if (dto.getIdDepartamento() == null) {
+            throw new RuntimeException("El idDepartamento es requerido");
+        }
+        Departamento departamento = departamentoRepository.findById(dto.getIdDepartamento().longValue())
                 .orElseThrow(() -> new RuntimeException("Departamento no encontrado"));
         recurso.setDepartamento(departamento);
 
