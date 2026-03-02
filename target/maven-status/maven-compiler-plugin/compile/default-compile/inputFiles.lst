@@ -8,10 +8,15 @@ C:\Users\apsoto\aulaclickbackend\aulaclick-backend\src\main\java\com\aulaclick\r
 C:\Users\apsoto\aulaclickbackend\aulaclick-backend\src\main\java\com\aulaclick\entity\Reserva.java
 C:\Users\apsoto\aulaclickbackend\aulaclick-backend\src\main\java\com\aulaclick\repository\DepartamentoRepository.java
 C:\Users\apsoto\aulaclickbackend\aulaclick-backend\src\main\java\com\aulaclick\entity\Role.java
+C:\Users\apsoto\aulaclickbackend\aulaclick-backend\src\main\java\com\aulaclick\dto\LoginRequest.java
+C:\Users\apsoto\aulaclickbackend\aulaclick-backend\src\main\java\com\aulaclick\service\UsuarioService.java
 C:\Users\apsoto\aulaclickbackend\aulaclick-backend\src\main\java\com\aulaclick\entity\Auditoria.java
 C:\Users\apsoto\aulaclickbackend\aulaclick-backend\src\main\java\com\aulaclick\controller\ReservaController.java
+C:\Users\apsoto\aulaclickbackend\aulaclick-backend\src\main\java\com\aulaclick\dto\UsuarioResponse.java
+C:\Users\apsoto\aulaclickbackend\aulaclick-backend\src\main\java\com\aulaclick\config\DataSeeder.java
 C:\Users\apsoto\aulaclickbackend\aulaclick-backend\src\main\java\com\aulaclick\entity\Recurso.java
 C:\Users\apsoto\aulaclickbackend\aulaclick-backend\src\main\java\com\aulaclick\entity\Usuario.java
 C:\Users\apsoto\aulaclickbackend\aulaclick-backend\src\main\java\com\aulaclick\service\RecursoService.java
 C:\Users\apsoto\aulaclickbackend\aulaclick-backend\src\main\java\com\aulaclick\service\ReservaService.java
 C:\Users\apsoto\aulaclickbackend\aulaclick-backend\src\main\java\com\aulaclick\repository\ReservaRepository.java
+C:\Users\apsoto\aulaclickbackend\aulaclick-backend\src\main\java\com\aulaclick\controller\UsuarioController.java
