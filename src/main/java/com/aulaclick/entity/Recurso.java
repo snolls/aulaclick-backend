@@ -28,11 +28,8 @@ public class Recurso {
     @JoinColumn(name = "id_tipo_recurso", nullable = false)
     private TipoRecurso tipoRecurso;
 
-    @Column(name = "capacidad")
+    @Column(name = "capacidad", nullable = false)
     private Integer capacidad;
-
-    @Column(name = "ubicacion")
-    private String ubicacion;
 
     @Column(name = "estado", nullable = false)
     private String estado;

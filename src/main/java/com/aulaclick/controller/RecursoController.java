@@ -40,7 +40,6 @@ public class RecursoController {
         Recurso recurso = new Recurso();
         recurso.setNombre(dto.getNombre());
         recurso.setCapacidad(dto.getCapacidad());
-        recurso.setUbicacion(dto.getUbicacion());
         recurso.setEstado(dto.getEstado());
 
         TipoRecurso tipo = tipoRecursoRepository.findById(dto.getIdTipoRecurso().longValue()).orElseThrow();
