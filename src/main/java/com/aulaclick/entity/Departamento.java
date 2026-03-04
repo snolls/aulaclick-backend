@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "Departamentos")
@@ -25,5 +26,6 @@ public class Departamento {
     private String nombre;
 
     @OneToMany(mappedBy = "departamento")
+    @JsonIgnore
     private List<Recurso> recursos;
 }
