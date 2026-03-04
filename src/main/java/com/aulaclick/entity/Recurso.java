@@ -26,9 +26,9 @@ public class Recurso {
     @Column(name = "nombre", nullable = false)
     private String nombre;
 
+    @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_tipo_recurso", nullable = false)
-    @JsonIgnoreProperties("recursos")
     private TipoRecurso tipoRecurso;
 
     @Column(name = "capacidad", nullable = false)
@@ -37,14 +37,14 @@ public class Recurso {
     @Column(name = "estado", nullable = false)
     private String estado;
 
-    @ManyToMany
+    @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "recurso_equipamiento", joinColumns = @JoinColumn(name = "id_recurso"), inverseJoinColumns = @JoinColumn(name = "id_equipamiento"))
-    @JsonIgnoreProperties("recursos")
     private List<Equipamiento> equipamientos;
 
+    @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_departamento", nullable = false)
-    @JsonIgnoreProperties("recursos")
     private Departamento departamento;
 
     @JsonIgnore
