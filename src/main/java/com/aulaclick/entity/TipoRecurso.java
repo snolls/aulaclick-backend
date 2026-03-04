@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "Tipos_Recurso")
 @Getter
@@ -21,4 +24,8 @@ public class TipoRecurso {
 
     @Column(name = "nombre", nullable = false)
     private String nombre;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "tipoRecurso")
+    private List<Recurso> recursos;
 }
