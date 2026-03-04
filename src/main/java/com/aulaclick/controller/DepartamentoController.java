@@ -31,10 +31,16 @@ public class DepartamentoController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminarDepartamento(@PathVariable Long id) {
         try {
+            if (!departamentoRepository.existsById(id)) {
+                return ResponseEntity.notFound().build();
+            }
             departamentoRepository.deleteById(id);
             return ResponseEntity.noContent().build();
         } catch (DataIntegrityViolationException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("No se puede borrar porque está en uso");
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("No se puede eliminar: el departamento está en uso.");
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
         }
     }
 }

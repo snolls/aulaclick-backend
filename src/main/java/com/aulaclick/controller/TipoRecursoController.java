@@ -31,10 +31,16 @@ public class TipoRecursoController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminarTipoRecurso(@PathVariable Long id) {
         try {
+            if (!tipoRecursoRepository.existsById(id)) {
+                return ResponseEntity.notFound().build();
+            }
             tipoRecursoRepository.deleteById(id);
             return ResponseEntity.noContent().build();
         } catch (DataIntegrityViolationException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("No se puede borrar porque está en uso");
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("No se puede eliminar: el tipo de recurso está en uso.");
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
         }
     }
 }

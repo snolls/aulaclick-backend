@@ -31,10 +31,16 @@ public class EquipamientoController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminarEquipamiento(@PathVariable Long id) {
         try {
+            if (!equipamientoRepository.existsById(id)) {
+                return ResponseEntity.notFound().build();
+            }
             equipamientoRepository.deleteById(id);
             return ResponseEntity.noContent().build();
         } catch (DataIntegrityViolationException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("No se puede borrar porque está en uso");
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("No se puede eliminar: el equipamiento está en uso.");
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
         }
     }
 }
