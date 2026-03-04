@@ -21,8 +21,8 @@ public class Departamento {
     @Column(name = "id_departamento")
     private Long idDepartamento;
 
-    @Column(name = "nombre_departamento", nullable = false)
-    private String nombreDepartamento;
+    @Column(name = "nombre", nullable = false)
+    private String nombre;
 
     @OneToMany(mappedBy = "departamento")
     private List<Recurso> recursos;
