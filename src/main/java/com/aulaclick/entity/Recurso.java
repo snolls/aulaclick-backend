@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "Recursos")
@@ -26,6 +28,7 @@ public class Recurso {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_tipo_recurso", nullable = false)
+    @JsonIgnoreProperties("recursos")
     private TipoRecurso tipoRecurso;
 
     @Column(name = "capacidad", nullable = false)
@@ -36,12 +39,15 @@ public class Recurso {
 
     @ManyToMany
     @JoinTable(name = "recurso_equipamiento", joinColumns = @JoinColumn(name = "id_recurso"), inverseJoinColumns = @JoinColumn(name = "id_equipamiento"))
+    @JsonIgnoreProperties("recursos")
     private List<Equipamiento> equipamientos;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_departamento", nullable = false)
+    @JsonIgnoreProperties("recursos")
     private Departamento departamento;
 
     @OneToMany(mappedBy = "recurso")
+    @JsonIgnore
     private List<Reserva> reservas;
 }
