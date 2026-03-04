@@ -4,6 +4,7 @@ import com.aulaclick.entity.TipoRecurso;
 import com.aulaclick.repository.TipoRecursoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,5 +26,15 @@ public class TipoRecursoController {
     public ResponseEntity<TipoRecurso> crearTipoRecurso(@RequestBody TipoRecurso tipoRecurso) {
         TipoRecurso saved = tipoRecursoRepository.save(tipoRecurso);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> eliminarTipoRecurso(@PathVariable Long id) {
+        try {
+            tipoRecursoRepository.deleteById(id);
+            return ResponseEntity.noContent().build();
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("No se puede borrar porque está en uso");
+        }
     }
 }
