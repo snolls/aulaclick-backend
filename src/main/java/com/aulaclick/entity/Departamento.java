@@ -25,7 +25,7 @@ public class Departamento {
     @Column(name = "nombre", nullable = false)
     private String nombre;
 
-    @OneToMany(mappedBy = "departamento")
     @JsonIgnore
+    @OneToMany(mappedBy = "departamento")
     private List<Recurso> recursos;
 }

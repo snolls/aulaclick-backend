@@ -47,7 +47,7 @@ public class Recurso {
     @JsonIgnoreProperties("recursos")
     private Departamento departamento;
 
-    @OneToMany(mappedBy = "recurso")
     @JsonIgnore
+    @OneToMany(mappedBy = "recurso")
     private List<Reserva> reservas;
 }
