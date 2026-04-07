@@ -41,7 +41,10 @@ public class RecursoController {
     }
 
     @PostMapping
-    public ResponseEntity<Recurso> crearRecurso(@RequestBody RecursoCrearDTO dto) {
+    public ResponseEntity<Recurso> crearRecurso(@RequestBody RecursoCrearDTO dto, @RequestHeader(value = "X-Rol-Usuario", required = false) String rolUsuario) {
+        if (rolUsuario == null || (!rolUsuario.equals("1") && !rolUsuario.equalsIgnoreCase("ADMIN"))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         Recurso recurso = new Recurso();
         recurso.setNombre(dto.getNombre());
         recurso.setCapacidad(dto.getCapacidad());
@@ -61,8 +64,8 @@ public class RecursoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRecurso(@PathVariable Long id, @RequestHeader(value = "id_rol", required = false) Long idRol) {
-        if (idRol == null || idRol != 1L) {
+    public ResponseEntity<Void> deleteRecurso(@PathVariable Long id, @RequestHeader(value = "X-Rol-Usuario", required = false) String rolUsuario) {
+        if (rolUsuario == null || (!rolUsuario.equals("1") && !rolUsuario.equalsIgnoreCase("ADMIN"))) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         try {
@@ -74,8 +77,8 @@ public class RecursoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Recurso> actualizarRecurso(@PathVariable Long id, @RequestBody RecursoCrearDTO dto, @RequestHeader(value = "id_rol", required = false) Long idRol) {
-        if (idRol == null || idRol != 1L) {
+    public ResponseEntity<Recurso> actualizarRecurso(@PathVariable Long id, @RequestBody RecursoCrearDTO dto, @RequestHeader(value = "X-Rol-Usuario", required = false) String rolUsuario) {
+        if (rolUsuario == null || (!rolUsuario.equals("1") && !rolUsuario.equalsIgnoreCase("ADMIN"))) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         
