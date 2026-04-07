@@ -78,14 +78,16 @@ public class RecursoController {
         if (idRol == null || idRol != 1L) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        try {
-            Recurso recurso = recursoService.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Recurso no encontrado"));
-            
-            recurso.setNombre(dto.getNombre());
-            recurso.setCapacidad(dto.getCapacidad());
-            recurso.setEstado(dto.getEstado());
+        
+        Recurso recurso = recursoService.findById(id).orElse(null);
+        if (recurso == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
 
+        recurso.setNombre(dto.getNombre());
+        recurso.setCapacidad(dto.getCapacidad());
+
+        try {
             TipoRecurso tipo = tipoRecursoRepository.findById(dto.getIdTipoRecurso().longValue())
                     .orElseThrow(() -> new RuntimeException("Tipo Recurso no encontrado"));
             Departamento depto = departamentoRepository.findById(dto.getIdDepartamento().longValue())
@@ -101,7 +103,7 @@ public class RecursoController {
             Recurso recursoActualizado = recursoService.save(recurso);
             return ResponseEntity.ok(recursoActualizado);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.badRequest().build();
         }
     }
 }
