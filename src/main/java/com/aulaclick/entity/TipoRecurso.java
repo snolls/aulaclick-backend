@@ -25,6 +25,9 @@ public class TipoRecurso {
     @Column(name = "nombre", nullable = false)
     private String nombre;
 
+    @Column(name = "imagen_url")
+    private String imagenUrl;
+
     @JsonIgnore
     @OneToMany(mappedBy = "tipoRecurso")
     private List<Recurso> recursos;

@@ -28,6 +28,17 @@ public class TipoRecursoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<TipoRecurso> actualizarTipoRecurso(@PathVariable Long id, @RequestBody TipoRecurso tipoRecursoDetalles) {
+        return tipoRecursoRepository.findById(id)
+                .map(tipo -> {
+                    tipo.setNombre(tipoRecursoDetalles.getNombre());
+                    tipo.setImagenUrl(tipoRecursoDetalles.getImagenUrl());
+                    return ResponseEntity.ok(tipoRecursoRepository.save(tipo));
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminarTipoRecurso(@PathVariable Long id) {
         try {
