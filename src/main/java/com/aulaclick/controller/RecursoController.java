@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.dao.DataIntegrityViolationException;
 
@@ -65,6 +66,35 @@ public class RecursoController {
             return ResponseEntity.noContent().build();
         } catch (DataIntegrityViolationException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Recurso> actualizarRecurso(@PathVariable Long id, @RequestBody RecursoCrearDTO dto) {
+        try {
+            Recurso recurso = recursoService.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Recurso no encontrado"));
+            
+            recurso.setNombre(dto.getNombre());
+            recurso.setCapacidad(dto.getCapacidad());
+            recurso.setEstado(dto.getEstado());
+
+            TipoRecurso tipo = tipoRecursoRepository.findById(dto.getIdTipoRecurso().longValue())
+                    .orElseThrow(() -> new RuntimeException("Tipo Recurso no encontrado"));
+            Departamento depto = departamentoRepository.findById(dto.getIdDepartamento().longValue())
+                    .orElseThrow(() -> new RuntimeException("Departamento no encontrado"));
+            List<Equipamiento> equip = equipamientoRepository.findAllById(
+                    dto.getIdsEquipamiento() == null ? List.of()
+                            : dto.getIdsEquipamiento().stream().map(Integer::longValue).toList());
+
+            recurso.setTipoRecurso(tipo);
+            recurso.setDepartamento(depto);
+            recurso.setEquipamientos(equip);
+
+            Recurso recursoActualizado = recursoService.save(recurso);
+            return ResponseEntity.ok(recursoActualizado);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 }
