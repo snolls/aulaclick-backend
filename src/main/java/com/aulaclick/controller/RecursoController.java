@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.dao.DataIntegrityViolationException;
 
@@ -60,7 +61,10 @@ public class RecursoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRecurso(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteRecurso(@PathVariable Long id, @RequestHeader(value = "id_rol", required = false) Long idRol) {
+        if (idRol == null || idRol != 1L) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         try {
             recursoService.deleteById(id);
             return ResponseEntity.noContent().build();
@@ -70,7 +74,10 @@ public class RecursoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Recurso> actualizarRecurso(@PathVariable Long id, @RequestBody RecursoCrearDTO dto) {
+    public ResponseEntity<Recurso> actualizarRecurso(@PathVariable Long id, @RequestBody RecursoCrearDTO dto, @RequestHeader(value = "id_rol", required = false) Long idRol) {
+        if (idRol == null || idRol != 1L) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         try {
             Recurso recurso = recursoService.findById(id)
                     .orElseThrow(() -> new RuntimeException("Recurso no encontrado"));
