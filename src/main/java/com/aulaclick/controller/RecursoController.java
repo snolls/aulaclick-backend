@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.List;
 
@@ -53,5 +56,15 @@ public class RecursoController {
 
         Recurso recursoGuardado = recursoService.save(recurso);
         return ResponseEntity.status(HttpStatus.CREATED).body(recursoGuardado);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteRecurso(@PathVariable Long id) {
+        try {
+            recursoService.deleteById(id);
+            return ResponseEntity.noContent().build();
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
     }
 }

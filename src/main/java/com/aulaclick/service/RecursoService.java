@@ -20,4 +20,8 @@ public class RecursoService {
     public Recurso save(Recurso recurso) {
         return recursoRepository.save(recurso);
     }
+
+    public void deleteById(Long id) {
+        recursoRepository.deleteById(id);
+    }
 }
