@@ -40,6 +40,13 @@ public class RecursoController {
         return recursoService.findAll();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Recurso> getRecursoById(@PathVariable Long id) {
+        return recursoService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @PostMapping
     public ResponseEntity<Recurso> crearRecurso(@RequestBody RecursoCrearDTO dto, @RequestHeader(value = "X-Rol-Usuario", required = false) String rolUsuario) {
         if (rolUsuario == null || (!rolUsuario.equals("1") && !rolUsuario.equalsIgnoreCase("ADMIN"))) {

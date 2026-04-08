@@ -22,6 +22,13 @@ public class EquipamientoController {
         return equipamientoRepository.findAll();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Equipamiento> getEquipamientoById(@PathVariable Long id) {
+        return equipamientoRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @PostMapping
     public ResponseEntity<Equipamiento> crearEquipamiento(@RequestBody Equipamiento equipamiento) {
         Equipamiento saved = equipamientoRepository.save(equipamiento);

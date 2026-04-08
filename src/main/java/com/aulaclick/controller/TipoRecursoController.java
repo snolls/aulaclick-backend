@@ -22,6 +22,13 @@ public class TipoRecursoController {
         return tipoRecursoRepository.findAll();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<TipoRecurso> getTipoRecursoById(@PathVariable Long id) {
+        return tipoRecursoRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @PostMapping
     public ResponseEntity<TipoRecurso> crearTipoRecurso(@RequestBody TipoRecurso tipoRecurso) {
         TipoRecurso saved = tipoRecursoRepository.save(tipoRecurso);
