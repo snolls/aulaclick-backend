@@ -8,9 +8,9 @@ import java.util.List;
 @Setter
 public class RecursoCrearDTO {
     private String nombre;
-    private Integer idTipoRecurso;
+    private Long idTipoRecurso;
     private Integer capacidad;
     private String estado;
-    private List<Integer> idsEquipamiento;
-    private Integer idDepartamento;
+    private List<Long> idsEquipamientos;
+    private Long idDepartamento;
 }

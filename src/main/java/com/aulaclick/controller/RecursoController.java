@@ -57,11 +57,11 @@ public class RecursoController {
         recurso.setCapacidad(dto.getCapacidad());
         recurso.setEstado(dto.getEstado());
 
-        TipoRecurso tipo = tipoRecursoRepository.findById(dto.getIdTipoRecurso().longValue()).orElseThrow();
-        Departamento depto = departamentoRepository.findById(dto.getIdDepartamento().longValue()).orElseThrow();
+        TipoRecurso tipo = tipoRecursoRepository.findById(dto.getIdTipoRecurso()).orElseThrow();
+        Departamento depto = departamentoRepository.findById(dto.getIdDepartamento()).orElseThrow();
         List<Equipamiento> equip = equipamientoRepository.findAllById(
-                dto.getIdsEquipamiento() == null ? List.of()
-                        : dto.getIdsEquipamiento().stream().map(Integer::longValue).toList());
+                dto.getIdsEquipamientos() == null ? List.of()
+                        : dto.getIdsEquipamientos());
         recurso.setTipoRecurso(tipo);
         recurso.setDepartamento(depto);
         recurso.setEquipamientos(equip);
@@ -98,13 +98,13 @@ public class RecursoController {
         recurso.setCapacidad(dto.getCapacidad());
 
         try {
-            TipoRecurso tipo = tipoRecursoRepository.findById(dto.getIdTipoRecurso().longValue())
+            TipoRecurso tipo = tipoRecursoRepository.findById(dto.getIdTipoRecurso())
                     .orElseThrow(() -> new RuntimeException("Tipo Recurso no encontrado"));
-            Departamento depto = departamentoRepository.findById(dto.getIdDepartamento().longValue())
+            Departamento depto = departamentoRepository.findById(dto.getIdDepartamento())
                     .orElseThrow(() -> new RuntimeException("Departamento no encontrado"));
             List<Equipamiento> equip = equipamientoRepository.findAllById(
-                    dto.getIdsEquipamiento() == null ? List.of()
-                            : dto.getIdsEquipamiento().stream().map(Integer::longValue).toList());
+                    dto.getIdsEquipamientos() == null ? List.of()
+                            : dto.getIdsEquipamientos());
 
             recurso.setTipoRecurso(tipo);
             recurso.setDepartamento(depto);
