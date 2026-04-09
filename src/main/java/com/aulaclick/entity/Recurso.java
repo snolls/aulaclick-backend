@@ -47,6 +47,9 @@ public class Recurso {
     @JoinColumn(name = "id_departamento", nullable = false)
     private Departamento departamento;
 
+    @Column(name = "imagen_url")
+    private String imagenUrl;
+
     @JsonIgnore
     @OneToMany(mappedBy = "recurso")
     private List<Reserva> reservas;
