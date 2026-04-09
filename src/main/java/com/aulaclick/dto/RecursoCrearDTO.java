@@ -13,5 +13,4 @@ public class RecursoCrearDTO {
     private String estado;
     private List<Long> idsEquipamientos;
     private Long idDepartamento;
-    private String imagenUrl;
 }

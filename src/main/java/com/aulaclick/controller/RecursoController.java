@@ -56,7 +56,6 @@ public class RecursoController {
         recurso.setNombre(dto.getNombre());
         recurso.setCapacidad(dto.getCapacidad());
         recurso.setEstado(dto.getEstado());
-        recurso.setImagenUrl(dto.getImagenUrl());
 
         TipoRecurso tipo = tipoRecursoRepository.findById(dto.getIdTipoRecurso()).orElseThrow();
         Departamento depto = departamentoRepository.findById(dto.getIdDepartamento()).orElseThrow();
@@ -97,7 +96,6 @@ public class RecursoController {
 
         recurso.setNombre(dto.getNombre());
         recurso.setCapacidad(dto.getCapacidad());
-        recurso.setImagenUrl(dto.getImagenUrl());
 
         try {
             TipoRecurso tipo = tipoRecursoRepository.findById(dto.getIdTipoRecurso())
