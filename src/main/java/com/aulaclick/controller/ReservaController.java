@@ -15,8 +15,12 @@ public class ReservaController {
     private final ReservaService reservaService;
 
     @PostMapping
-    public ResponseEntity<Reserva> createReserva(@RequestBody Reserva reserva) {
-        Reserva nuevaReserva = reservaService.createReserva(reserva);
-        return new ResponseEntity<>(nuevaReserva, HttpStatus.CREATED);
+    public ResponseEntity<?> createReserva(@RequestBody Reserva reserva) {
+        try {
+            Reserva nuevaReserva = reservaService.createReserva(reserva);
+            return new ResponseEntity<>(nuevaReserva, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
