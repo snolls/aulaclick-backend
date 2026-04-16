@@ -97,6 +97,7 @@ public class RecursoController {
 
         recurso.setNombre(dto.getNombre());
         recurso.setCapacidad(dto.getCapacidad());
+        recurso.setEstado(dto.getEstado());
         recurso.setImagenUrl(dto.getImagenUrl());
 
         try {
