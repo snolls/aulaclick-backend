@@ -97,4 +97,8 @@ public class ReservaService {
 
         return reservaRepository.save(nuevaReserva);
     }
+
+    public List<Reserva> getReservasByRecurso(Long idRecurso) {
+        return reservaRepository.findByRecurso_IdRecurso(idRecurso);
+    }
 }

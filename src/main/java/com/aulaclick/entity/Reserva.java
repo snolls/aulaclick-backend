@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -22,12 +23,15 @@ public class Reserva {
     @Column(name = "id_reserva")
     private Long idReserva;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "fecha", nullable = false)
     private LocalDate fecha;
 
+    @JsonFormat(pattern = "HH:mm:ss")
     @Column(name = "hora_inicio", nullable = false)
     private LocalTime horaInicio;
 
+    @JsonFormat(pattern = "HH:mm:ss")
     @Column(name = "hora_fin", nullable = false)
     private LocalTime horaFin;
 

@@ -25,4 +25,9 @@ public class ReservaController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @GetMapping("/recurso/{id}")
+    public ResponseEntity<?> getReservasByRecurso(@PathVariable Long id) {
+        return ResponseEntity.ok(reservaService.getReservasByRecurso(id));
+    }
 }
