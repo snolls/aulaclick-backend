@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalTime;
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -50,6 +51,15 @@ public class Recurso {
 
     @Column(name = "imagen_url")
     private String imagenUrl;
+
+    @Column(name = "permite_fines_semana")
+    private Boolean permiteFinesSemana;
+
+    @Column(name = "hora_apertura")
+    private LocalTime horaApertura;
+
+    @Column(name = "hora_cierre")
+    private LocalTime horaCierre;
 
     @JsonIgnore
     @OneToMany(mappedBy = "recurso")

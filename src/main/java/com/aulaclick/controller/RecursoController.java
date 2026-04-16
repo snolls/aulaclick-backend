@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.dao.DataIntegrityViolationException;
 
+import java.time.LocalTime;
 import java.util.List;
 
 @RestController
@@ -57,6 +58,9 @@ public class RecursoController {
         recurso.setCapacidad(dto.getCapacidad());
         recurso.setEstado(dto.getEstado());
         recurso.setImagenUrl(dto.getImagenUrl());
+        recurso.setPermiteFinesSemana(dto.getPermiteFinesSemana() != null ? dto.getPermiteFinesSemana() : false);
+        recurso.setHoraApertura(dto.getHoraApertura() != null ? dto.getHoraApertura() : LocalTime.of(8, 0));
+        recurso.setHoraCierre(dto.getHoraCierre() != null ? dto.getHoraCierre() : LocalTime.of(21, 0));
 
         TipoRecurso tipo = tipoRecursoRepository.findById(dto.getIdTipoRecurso()).orElseThrow();
         Departamento depto = departamentoRepository.findById(dto.getIdDepartamento()).orElseThrow();
@@ -99,6 +103,9 @@ public class RecursoController {
         recurso.setCapacidad(dto.getCapacidad());
         recurso.setEstado(dto.getEstado());
         recurso.setImagenUrl(dto.getImagenUrl());
+        recurso.setPermiteFinesSemana(dto.getPermiteFinesSemana() != null ? dto.getPermiteFinesSemana() : false);
+        recurso.setHoraApertura(dto.getHoraApertura() != null ? dto.getHoraApertura() : LocalTime.of(8, 0));
+        recurso.setHoraCierre(dto.getHoraCierre() != null ? dto.getHoraCierre() : LocalTime.of(21, 0));
 
         try {
             TipoRecurso tipo = tipoRecursoRepository.findById(dto.getIdTipoRecurso())

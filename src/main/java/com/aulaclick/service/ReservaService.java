@@ -1,6 +1,8 @@
 package com.aulaclick.service;
 
+import com.aulaclick.entity.Recurso;
 import com.aulaclick.entity.Reserva;
+import com.aulaclick.repository.RecursoRepository;
 import com.aulaclick.repository.ReservaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import java.time.LocalTime;
 public class ReservaService {
 
     private final ReservaRepository reservaRepository;
+    private final RecursoRepository recursoRepository;
 
     public Reserva createReserva(Reserva nuevaReserva) {
         if (nuevaReserva.getRecurso() == null || nuevaReserva.getRecurso().getIdRecurso() == null) {
@@ -39,14 +42,22 @@ public class ReservaService {
             throw new IllegalArgumentException("La hora de inicio debe ser anterior a la hora de fin.");
         }
 
+        Recurso recurso = recursoRepository.findById(nuevaReserva.getRecurso().getIdRecurso())
+                .orElseThrow(() -> new IllegalArgumentException("Recurso no encontrado"));
+
+        boolean permiteFinesSemana = recurso.getPermiteFinesSemana() != null ? recurso.getPermiteFinesSemana() : false;
+        LocalTime horaApertura = recurso.getHoraApertura() != null ? recurso.getHoraApertura() : LocalTime.of(8, 0);
+        LocalTime horaCierre = recurso.getHoraCierre() != null ? recurso.getHoraCierre() : LocalTime.of(21, 0);
+
         // 3. Fines de semana
-        if (fecha.getDayOfWeek() == DayOfWeek.SATURDAY || fecha.getDayOfWeek() == DayOfWeek.SUNDAY) {
-            throw new IllegalArgumentException("No se pueden hacer reservas en fines de semana.");
+        boolean esFinDeSemana = fecha.getDayOfWeek() == DayOfWeek.SATURDAY || fecha.getDayOfWeek() == DayOfWeek.SUNDAY;
+        if (!permiteFinesSemana && esFinDeSemana) {
+            throw new IllegalArgumentException("Este recurso no permite reservas en fines de semana.");
         }
 
-        // 4. Horario de apertura (08:00 a 21:00)
-        if (horaInicio.isBefore(LocalTime.of(8, 0)) || horaFin.isAfter(LocalTime.of(21, 0))) {
-            throw new IllegalArgumentException("La reserva debe estar dentro del horario de apertura (08:00 - 21:00).");
+        // 4. Horario de apertura dinámico
+        if (horaInicio.isBefore(horaApertura) || horaFin.isAfter(horaCierre)) {
+            throw new IllegalArgumentException("La reserva debe estar dentro del horario de apertura del recurso (" + horaApertura + " - " + horaCierre + ").");
         }
 
         // 5. Solapamientos
