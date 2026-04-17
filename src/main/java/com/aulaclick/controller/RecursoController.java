@@ -112,7 +112,7 @@ public class RecursoController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         try {
-            recursoService.deleteById(id);
+            recursoService.eliminarRecurso(id);
             return ResponseEntity.noContent().build();
         } catch (DataIntegrityViolationException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();

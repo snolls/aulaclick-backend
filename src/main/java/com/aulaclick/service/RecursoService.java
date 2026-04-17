@@ -2,6 +2,7 @@ package com.aulaclick.service;
 
 import com.aulaclick.entity.Recurso;
 import com.aulaclick.repository.RecursoRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,8 +27,14 @@ public class RecursoService {
         return recursoRepository.findById(id);
     }
 
-    public void deleteById(Long id) {
-        recursoRepository.deleteById(id);
+    @Transactional
+    public void eliminarRecurso(Long id) {
+        Recurso recurso = recursoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Recurso no encontrado"));
+        if (recurso.getEquipamientos() != null) {
+            recurso.getEquipamientos().clear();
+        }
+        recursoRepository.delete(recurso);
     }
 
 }
