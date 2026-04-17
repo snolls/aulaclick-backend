@@ -1,6 +1,8 @@
 package com.aulaclick.controller;
 
+import com.aulaclick.entity.ImagenGaleria;
 import com.aulaclick.entity.Recurso;
+import com.aulaclick.repository.ImagenGaleriaRepository;
 import com.aulaclick.service.RecursoService;
 import lombok.RequiredArgsConstructor;
 import com.aulaclick.dto.RecursoCrearDTO;
@@ -25,6 +27,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/recursos")
@@ -32,6 +35,7 @@ import java.util.List;
 public class RecursoController {
 
     private final RecursoService recursoService;
+    private final ImagenGaleriaRepository imagenGaleriaRepository;
     private final DepartamentoRepository departamentoRepository;
     private final TipoRecursoRepository tipoRecursoRepository;
     private final EquipamientoRepository equipamientoRepository;
@@ -43,8 +47,21 @@ public class RecursoController {
 
     @GetMapping("/imagenes")
     public ResponseEntity<List<String>> getImagenesExistentes() {
-        List<String> imagenes = recursoService.obtenerImagenesExistentes();
+        List<String> imagenes = imagenGaleriaRepository.findAll()
+                .stream()
+                .map(ImagenGaleria::getUrl)
+                .collect(Collectors.toList());
         return ResponseEntity.ok(imagenes);
+    }
+
+    @PostMapping("/imagenes")
+    public ResponseEntity<String> guardarImagen(@RequestBody String url) {
+        String urlLimpia = url.trim().replaceAll("^\"|\"$", "");
+        if (imagenGaleriaRepository.findByUrl(urlLimpia).isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("La imagen ya existe en la galería");
+        }
+        imagenGaleriaRepository.save(new ImagenGaleria(urlLimpia));
+        return ResponseEntity.status(HttpStatus.CREATED).body(urlLimpia);
     }
 
     @GetMapping("/{id}")
