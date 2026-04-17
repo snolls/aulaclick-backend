@@ -1,5 +1,6 @@
 package com.aulaclick.controller;
 
+import com.aulaclick.dto.ReservaDTO;
 import com.aulaclick.entity.Reserva;
 import com.aulaclick.service.ReservaService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class ReservaController {
     @PostMapping
     public ResponseEntity<?> createReserva(@RequestBody ReservaCrearDTO dto) {
         try {
-            Reserva nuevaReserva = reservaService.createReserva(dto);
+            ReservaDTO nuevaReserva = reservaService.createReserva(dto);
             return new ResponseEntity<>(nuevaReserva, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

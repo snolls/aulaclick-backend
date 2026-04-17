@@ -1,6 +1,7 @@
 package com.aulaclick.service;
 
 import com.aulaclick.dto.ReservaCrearDTO;
+import com.aulaclick.dto.ReservaDTO;
 import com.aulaclick.entity.Recurso;
 import com.aulaclick.entity.Reserva;
 import com.aulaclick.entity.Usuario;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -26,7 +28,7 @@ public class ReservaService {
     private final RecursoRepository recursoRepository;
     private final UsuarioRepository usuarioRepository;
 
-    public Reserva createReserva(ReservaCrearDTO dto) {
+    public ReservaDTO createReserva(ReservaCrearDTO dto) {
         if (dto.getIdRecurso() == null || dto.getIdUsuario() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Se requiere el ID del recurso y del usuario");
         }
@@ -97,10 +99,31 @@ public class ReservaService {
         nuevaReserva.setRecurso(recurso);
         nuevaReserva.setUsuario(usuario);
 
-        return reservaRepository.save(nuevaReserva);
+        return toDTO(reservaRepository.save(nuevaReserva));
     }
 
-    public List<Reserva> getReservasByRecurso(Long idRecurso) {
-        return reservaRepository.findByRecurso_IdRecurso(idRecurso);
+    public List<ReservaDTO> getReservasByRecurso(Long idRecurso) {
+        return reservaRepository.findByRecurso_IdRecurso(idRecurso)
+                .stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    private ReservaDTO toDTO(Reserva reserva) {
+        ReservaDTO dto = new ReservaDTO();
+        dto.setIdReserva(reserva.getIdReserva());
+        dto.setFecha(reserva.getFecha());
+        dto.setHoraInicio(reserva.getHoraInicio());
+        dto.setHoraFin(reserva.getHoraFin());
+        dto.setMotivo(reserva.getMotivo());
+        if (reserva.getUsuario() != null) {
+            dto.setIdUsuario(reserva.getUsuario().getIdUsuario());
+            dto.setNombreUsuario(reserva.getUsuario().getNombreCompleto());
+        }
+        if (reserva.getRecurso() != null) {
+            dto.setIdRecurso(reserva.getRecurso().getIdRecurso());
+            dto.setNombreRecurso(reserva.getRecurso().getNombre());
+        }
+        return dto;
     }
 }
