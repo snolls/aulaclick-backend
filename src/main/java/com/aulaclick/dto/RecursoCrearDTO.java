@@ -14,7 +14,7 @@ public class RecursoCrearDTO {
     private String estado;
     private List<Long> idsEquipamientos;
     private Long idDepartamento;
-    private String imagenUrl;
+    private Long idImagen;
     private Boolean permiteFinesSemana;
     private LocalTime horaApertura;
     private LocalTime horaCierre;

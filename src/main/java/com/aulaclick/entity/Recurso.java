@@ -49,8 +49,10 @@ public class Recurso {
     private Departamento departamento;
 
 
-    @Column(name = "imagen_url")
-    private String imagenUrl;
+    @JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_imagen")
+    private ImagenGaleria imagen;
 
     @Column(name = "permite_fines_semana")
     private Boolean permiteFinesSemana;

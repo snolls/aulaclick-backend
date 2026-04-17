@@ -1,6 +1,7 @@
 package com.aulaclick.controller;
 
 import com.aulaclick.dto.ImagenRequestDTO;
+import com.aulaclick.dto.RecursoDTO;
 import com.aulaclick.entity.ImagenGaleria;
 import com.aulaclick.entity.Recurso;
 import com.aulaclick.repository.ImagenGaleriaRepository;
@@ -42,8 +43,10 @@ public class RecursoController {
     private final EquipamientoRepository equipamientoRepository;
 
     @GetMapping
-    public List<Recurso> getAllRecursos() {
-        return recursoService.findAll();
+    public List<RecursoDTO> getAllRecursos() {
+        return recursoService.findAll().stream()
+                .map(RecursoDTO::fromEntity)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/imagenes")
@@ -66,14 +69,15 @@ public class RecursoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Recurso> getRecursoById(@PathVariable Long id) {
+    public ResponseEntity<RecursoDTO> getRecursoById(@PathVariable Long id) {
         return recursoService.findById(id)
+                .map(RecursoDTO::fromEntity)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Recurso> crearRecurso(@RequestBody RecursoCrearDTO dto, @RequestHeader(value = "X-Rol-Usuario", required = false) String rolUsuario) {
+    public ResponseEntity<RecursoDTO> crearRecurso(@RequestBody RecursoCrearDTO dto, @RequestHeader(value = "X-Rol-Usuario", required = false) String rolUsuario) {
         if (rolUsuario == null || (!rolUsuario.equals("1") && !rolUsuario.equalsIgnoreCase("ADMIN"))) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -81,10 +85,13 @@ public class RecursoController {
         recurso.setNombre(dto.getNombre());
         recurso.setCapacidad(dto.getCapacidad());
         recurso.setEstado(dto.getEstado());
-        recurso.setImagenUrl(dto.getImagenUrl());
         recurso.setPermiteFinesSemana(dto.getPermiteFinesSemana() != null ? dto.getPermiteFinesSemana() : false);
         recurso.setHoraApertura(dto.getHoraApertura() != null ? dto.getHoraApertura() : LocalTime.of(8, 0));
         recurso.setHoraCierre(dto.getHoraCierre() != null ? dto.getHoraCierre() : LocalTime.of(21, 0));
+
+        if (dto.getIdImagen() != null) {
+            imagenGaleriaRepository.findById(dto.getIdImagen()).ifPresent(recurso::setImagen);
+        }
 
         TipoRecurso tipo = tipoRecursoRepository.findById(dto.getIdTipoRecurso()).orElseThrow();
         Departamento depto = departamentoRepository.findById(dto.getIdDepartamento()).orElseThrow();
@@ -95,8 +102,7 @@ public class RecursoController {
         recurso.setDepartamento(depto);
         recurso.setEquipamientos(equip);
 
-        Recurso recursoGuardado = recursoService.save(recurso);
-        return ResponseEntity.status(HttpStatus.CREATED).body(recursoGuardado);
+        return ResponseEntity.status(HttpStatus.CREATED).body(RecursoDTO.fromEntity(recursoService.save(recurso)));
     }
 
     @DeleteMapping("/{id}")
@@ -113,11 +119,11 @@ public class RecursoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Recurso> actualizarRecurso(@PathVariable Long id, @RequestBody RecursoCrearDTO dto, @RequestHeader(value = "X-Rol-Usuario", required = false) String rolUsuario) {
+    public ResponseEntity<RecursoDTO> actualizarRecurso(@PathVariable Long id, @RequestBody RecursoCrearDTO dto, @RequestHeader(value = "X-Rol-Usuario", required = false) String rolUsuario) {
         if (rolUsuario == null || (!rolUsuario.equals("1") && !rolUsuario.equalsIgnoreCase("ADMIN"))) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        
+
         Recurso recurso = recursoService.findById(id).orElse(null);
         if (recurso == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -126,10 +132,15 @@ public class RecursoController {
         recurso.setNombre(dto.getNombre());
         recurso.setCapacidad(dto.getCapacidad());
         recurso.setEstado(dto.getEstado());
-        recurso.setImagenUrl(dto.getImagenUrl());
         recurso.setPermiteFinesSemana(dto.getPermiteFinesSemana() != null ? dto.getPermiteFinesSemana() : false);
         recurso.setHoraApertura(dto.getHoraApertura() != null ? dto.getHoraApertura() : LocalTime.of(8, 0));
         recurso.setHoraCierre(dto.getHoraCierre() != null ? dto.getHoraCierre() : LocalTime.of(21, 0));
+
+        if (dto.getIdImagen() != null) {
+            imagenGaleriaRepository.findById(dto.getIdImagen()).ifPresent(recurso::setImagen);
+        } else {
+            recurso.setImagen(null);
+        }
 
         try {
             TipoRecurso tipo = tipoRecursoRepository.findById(dto.getIdTipoRecurso())
@@ -144,8 +155,7 @@ public class RecursoController {
             recurso.setDepartamento(depto);
             recurso.setEquipamientos(equip);
 
-            Recurso recursoActualizado = recursoService.save(recurso);
-            return ResponseEntity.ok(recursoActualizado);
+            return ResponseEntity.ok(RecursoDTO.fromEntity(recursoService.save(recurso)));
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }

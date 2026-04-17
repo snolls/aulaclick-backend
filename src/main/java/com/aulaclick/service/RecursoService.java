@@ -30,7 +30,4 @@ public class RecursoService {
         recursoRepository.deleteById(id);
     }
 
-    public List<String> obtenerImagenesExistentes() {
-        return recursoRepository.findDistinctImagenes();
-    }
 }
