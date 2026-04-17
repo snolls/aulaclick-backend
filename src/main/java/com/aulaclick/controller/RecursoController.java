@@ -58,8 +58,8 @@ public class RecursoController {
     @PostMapping("/imagenes")
     public ResponseEntity<String> guardarImagen(@RequestBody ImagenRequestDTO dto) {
         String url = dto.getUrl();
-        if (imagenGaleriaRepository.findByUrl(url).isPresent()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("La imagen ya existe en la galería");
+        if (imagenGaleriaRepository.existsByUrl(url)) {
+            return ResponseEntity.ok(url);
         }
         imagenGaleriaRepository.save(new ImagenGaleria(url));
         return ResponseEntity.status(HttpStatus.CREATED).body(url);

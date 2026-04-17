@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface ImagenGaleriaRepository extends JpaRepository<ImagenGaleria, Long> {
 
     Optional<ImagenGaleria> findByUrl(String url);
+
+    boolean existsByUrl(String url);
 }
