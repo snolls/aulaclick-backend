@@ -59,13 +59,14 @@ public class RecursoController {
     }
 
     @PostMapping("/imagenes")
-    public ResponseEntity<String> guardarImagen(@RequestBody ImagenRequestDTO dto) {
+    public ResponseEntity<ImagenGaleria> guardarImagen(@RequestBody ImagenRequestDTO dto) {
         String url = dto.getUrl();
-        if (imagenGaleriaRepository.existsByUrl(url)) {
-            return ResponseEntity.ok(url);
-        }
-        imagenGaleriaRepository.save(new ImagenGaleria(url));
-        return ResponseEntity.status(HttpStatus.CREATED).body(url);
+        return imagenGaleriaRepository.findByUrl(url)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> {
+                    ImagenGaleria guardada = imagenGaleriaRepository.save(new ImagenGaleria(url));
+                    return ResponseEntity.status(HttpStatus.CREATED).body(guardada);
+                });
     }
 
     @GetMapping("/{id}")
