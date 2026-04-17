@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "ImagenGaleria")
+@Table(name = "imagenes_galeria")
 @Getter
 @Setter
 @NoArgsConstructor
