@@ -1,5 +1,6 @@
 package com.aulaclick.controller;
 
+import com.aulaclick.dto.ImagenRequestDTO;
 import com.aulaclick.entity.ImagenGaleria;
 import com.aulaclick.entity.Recurso;
 import com.aulaclick.repository.ImagenGaleriaRepository;
@@ -55,13 +56,13 @@ public class RecursoController {
     }
 
     @PostMapping("/imagenes")
-    public ResponseEntity<String> guardarImagen(@RequestBody String url) {
-        String urlLimpia = url.trim().replaceAll("^\"|\"$", "");
-        if (imagenGaleriaRepository.findByUrl(urlLimpia).isPresent()) {
+    public ResponseEntity<String> guardarImagen(@RequestBody ImagenRequestDTO dto) {
+        String url = dto.getUrl();
+        if (imagenGaleriaRepository.findByUrl(url).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("La imagen ya existe en la galería");
         }
-        imagenGaleriaRepository.save(new ImagenGaleria(urlLimpia));
-        return ResponseEntity.status(HttpStatus.CREATED).body(urlLimpia);
+        imagenGaleriaRepository.save(new ImagenGaleria(url));
+        return ResponseEntity.status(HttpStatus.CREATED).body(url);
     }
 
     @GetMapping("/{id}")
