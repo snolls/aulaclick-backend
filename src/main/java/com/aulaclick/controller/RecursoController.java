@@ -50,12 +50,8 @@ public class RecursoController {
     }
 
     @GetMapping("/imagenes")
-    public ResponseEntity<List<String>> getImagenesExistentes() {
-        List<String> imagenes = imagenGaleriaRepository.findAll()
-                .stream()
-                .map(ImagenGaleria::getUrl)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(imagenes);
+    public ResponseEntity<List<ImagenGaleria>> getImagenesExistentes() {
+        return ResponseEntity.ok(imagenGaleriaRepository.findAll());
     }
 
     @PostMapping("/imagenes")
