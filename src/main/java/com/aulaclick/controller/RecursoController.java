@@ -41,6 +41,12 @@ public class RecursoController {
         return recursoService.findAll();
     }
 
+    @GetMapping("/imagenes")
+    public ResponseEntity<List<String>> getImagenesExistentes() {
+        List<String> imagenes = recursoService.obtenerImagenesExistentes();
+        return ResponseEntity.ok(imagenes);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Recurso> getRecursoById(@PathVariable Long id) {
         return recursoService.findById(id)

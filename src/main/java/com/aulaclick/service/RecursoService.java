@@ -29,4 +29,8 @@ public class RecursoService {
     public void deleteById(Long id) {
         recursoRepository.deleteById(id);
     }
+
+    public List<String> obtenerImagenesExistentes() {
+        return recursoRepository.findDistinctImagenes();
+    }
 }
