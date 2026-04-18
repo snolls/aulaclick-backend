@@ -37,6 +37,11 @@ public class ReservaController {
         return ResponseEntity.ok(reservaService.getMisReservas(idUsuario));
     }
 
+    @GetMapping("/usuario/{idUsuario}")
+    public ResponseEntity<?> obtenerReservasPorUsuario(@PathVariable Long idUsuario) {
+        return ResponseEntity.ok(reservaService.getMisReservas(idUsuario));
+    }
+
     @PutMapping("/{idReserva}/cancelar")
     public ResponseEntity<?> cancelarReserva(@PathVariable Long idReserva) {
         try {
