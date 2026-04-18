@@ -118,6 +118,7 @@ public class ReservaService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public ReservaDTO cancelarReserva(Long idReserva) {
         Reserva reserva = reservaRepository.findById(idReserva)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva no encontrada"));
