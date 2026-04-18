@@ -161,8 +161,6 @@ public class RecursoController {
             ImagenGaleria imagen = imagenGaleriaRepository.findById(dto.getIdImagen())
                     .orElseThrow(() -> new RuntimeException("Imagen no encontrada"));
             recurso.setImagen(imagen);
-        } else {
-            recurso.setImagen(null);
         }
 
         try {
