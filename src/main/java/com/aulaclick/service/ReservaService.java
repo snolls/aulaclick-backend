@@ -109,6 +109,20 @@ public class ReservaService {
                 .collect(Collectors.toList());
     }
 
+    public List<ReservaDTO> getMisReservas(Long idUsuario) {
+        return reservaRepository.findByUsuario_IdUsuario(idUsuario)
+                .stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public ReservaDTO cancelarReserva(Long idReserva) {
+        Reserva reserva = reservaRepository.findById(idReserva)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva no encontrada"));
+        reserva.setEstado("CANCELADA");
+        return toDTO(reservaRepository.save(reserva));
+    }
+
     private ReservaDTO toDTO(Reserva reserva) {
         ReservaDTO dto = new ReservaDTO();
         dto.setIdReserva(reserva.getIdReserva());
@@ -124,6 +138,7 @@ public class ReservaService {
             dto.setIdRecurso(reserva.getRecurso().getIdRecurso());
             dto.setNombreRecurso(reserva.getRecurso().getNombre());
         }
+        dto.setEstado(reserva.getEstado());
         return dto;
     }
 }

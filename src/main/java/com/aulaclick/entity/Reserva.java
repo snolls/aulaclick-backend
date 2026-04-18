@@ -38,6 +38,9 @@ public class Reserva {
     @Column(name = "motivo")
     private String motivo;
 
+    @Column(name = "estado", nullable = false)
+    private String estado = "ACTIVA";
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", nullable = false)
     private Usuario usuario;

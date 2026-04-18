@@ -31,4 +31,18 @@ public class ReservaController {
     public ResponseEntity<?> getReservasByRecurso(@PathVariable Long id) {
         return ResponseEntity.ok(reservaService.getReservasByRecurso(id));
     }
+
+    @GetMapping("/mis-reservas/{idUsuario}")
+    public ResponseEntity<?> getMisReservas(@PathVariable Long idUsuario) {
+        return ResponseEntity.ok(reservaService.getMisReservas(idUsuario));
+    }
+
+    @PutMapping("/{idReserva}/cancelar")
+    public ResponseEntity<?> cancelarReserva(@PathVariable Long idReserva) {
+        try {
+            return ResponseEntity.ok(reservaService.cancelarReserva(idReserva));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

@@ -29,4 +29,6 @@ public class ReservaDTO {
 
     private Long idRecurso;
     private String nombreRecurso;
+
+    private String estado;
 }
