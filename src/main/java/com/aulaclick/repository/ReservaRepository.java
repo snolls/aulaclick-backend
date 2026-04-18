@@ -20,6 +20,6 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
 
     List<Reserva> findByUsuario_IdUsuario(Long idUsuario);
 
-    @Query("SELECT COUNT(r) FROM Reserva r WHERE r.recurso.idRecurso = :idRecurso AND r.fecha = :fecha AND (r.horaInicio < :horaFin AND r.horaFin > :horaInicio)")
+    @Query("SELECT COUNT(r) FROM Reserva r WHERE r.recurso.idRecurso = :idRecurso AND r.fecha = :fecha AND r.estado != 'CANCELADA' AND (r.horaInicio < :horaFin AND r.horaFin > :horaInicio)")
     long contarSolapamientos(@Param("idRecurso") Long idRecurso, @Param("fecha") LocalDate fecha, @Param("horaInicio") LocalTime horaInicio, @Param("horaFin") LocalTime horaFin);
 }
