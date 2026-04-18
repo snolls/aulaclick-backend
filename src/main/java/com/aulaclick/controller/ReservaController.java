@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.aulaclick.dto.ReservaCrearDTO;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/reservas")
@@ -38,7 +39,7 @@ public class ReservaController {
     }
 
     @GetMapping("/usuario/{idUsuario}")
-    public ResponseEntity<?> obtenerReservasPorUsuario(@PathVariable Long idUsuario) {
+    public ResponseEntity<List<ReservaDTO>> obtenerMisReservas(@PathVariable("idUsuario") Long idUsuario) {
         return ResponseEntity.ok(reservaService.getMisReservas(idUsuario));
     }
 
