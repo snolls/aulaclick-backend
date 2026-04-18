@@ -87,7 +87,11 @@ public class RecursoController {
         recurso.setHoraCierre(dto.getHoraCierre() != null ? dto.getHoraCierre() : LocalTime.of(21, 0));
 
         if (dto.getIdImagen() != null) {
-            imagenGaleriaRepository.findById(dto.getIdImagen()).ifPresent(recurso::setImagen);
+            ImagenGaleria imagen = imagenGaleriaRepository.findById(dto.getIdImagen())
+                    .orElseThrow(() -> new RuntimeException("Imagen no encontrada"));
+            recurso.setImagen(imagen);
+        } else {
+            recurso.setImagen(null);
         }
 
         TipoRecurso tipo = tipoRecursoRepository.findById(dto.getIdTipoRecurso()).orElseThrow();
@@ -134,7 +138,9 @@ public class RecursoController {
         recurso.setHoraCierre(dto.getHoraCierre() != null ? dto.getHoraCierre() : LocalTime.of(21, 0));
 
         if (dto.getIdImagen() != null) {
-            imagenGaleriaRepository.findById(dto.getIdImagen()).ifPresent(recurso::setImagen);
+            ImagenGaleria imagen = imagenGaleriaRepository.findById(dto.getIdImagen())
+                    .orElseThrow(() -> new RuntimeException("Imagen no encontrada"));
+            recurso.setImagen(imagen);
         } else {
             recurso.setImagen(null);
         }
