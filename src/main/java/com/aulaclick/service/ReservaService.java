@@ -110,12 +110,11 @@ public class ReservaService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public List<ReservaDTO> getMisReservas(Long idUsuario) {
-        return reservaRepository.findByUsuario_IdUsuario(idUsuario)
-                .stream()
-                .map(this::toDTO)
-                .collect(Collectors.toList());
+        List<Reserva> reservas = reservaRepository.findByUsuario_IdUsuario(idUsuario);
+        actualizarEstadosCaducados(reservas);
+        return reservas.stream().map(this::toDTO).collect(Collectors.toList());
     }
 
     @Transactional
@@ -124,6 +123,23 @@ public class ReservaService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reserva no encontrada"));
         reserva.setEstado("CANCELADA");
         return toDTO(reservaRepository.save(reserva));
+    }
+
+    private void actualizarEstadosCaducados(List<Reserva> reservas) {
+        java.time.LocalDateTime ahora = java.time.LocalDateTime.now();
+        boolean hayCambios = false;
+        for (Reserva r : reservas) {
+            if ("ACTIVA".equalsIgnoreCase(r.getEstado())) {
+                java.time.LocalDateTime finReserva = java.time.LocalDateTime.of(r.getFecha(), r.getHoraFin());
+                if (finReserva.isBefore(ahora)) {
+                    r.setEstado("FINALIZADA");
+                    hayCambios = true;
+                }
+            }
+        }
+        if (hayCambios) {
+            reservaRepository.saveAll(reservas);
+        }
     }
 
     private ReservaDTO toDTO(Reserva reserva) {
