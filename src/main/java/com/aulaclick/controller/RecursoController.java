@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import java.time.LocalTime;
@@ -70,6 +71,12 @@ public class RecursoController {
     @DeleteMapping("/imagenes/{id}")
     public ResponseEntity<Void> eliminarImagen(@PathVariable Long id) {
         galeriaService.eliminarImagen(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/imagenes")
+    public ResponseEntity<Void> eliminarImagenes(@RequestParam List<Long> ids) {
+        galeriaService.eliminarImagenesMasivo(ids);
         return ResponseEntity.noContent().build();
     }
 
