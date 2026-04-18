@@ -139,6 +139,9 @@ public class ReservaService {
         if (reserva.getRecurso() != null) {
             dto.setIdRecurso(reserva.getRecurso().getIdRecurso());
             dto.setNombreRecurso(reserva.getRecurso().getNombre());
+            if (reserva.getRecurso().getImagen() != null) {
+                dto.setImagenUrl(reserva.getRecurso().getImagen().getUrl());
+            }
         }
         dto.setEstado(reserva.getEstado());
         return dto;
