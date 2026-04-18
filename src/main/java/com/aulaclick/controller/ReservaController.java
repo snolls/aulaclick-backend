@@ -19,13 +19,9 @@ public class ReservaController {
     private final ReservaService reservaService;
 
     @PostMapping
-    public ResponseEntity<?> createReserva(@RequestBody ReservaCrearDTO dto) {
-        try {
-            ReservaDTO nuevaReserva = reservaService.createReserva(dto);
-            return new ResponseEntity<>(nuevaReserva, HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<ReservaDTO> createReserva(@RequestBody ReservaCrearDTO dto) {
+        ReservaDTO nuevaReserva = reservaService.createReserva(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(nuevaReserva);
     }
 
     @GetMapping("/recurso/{id}")
