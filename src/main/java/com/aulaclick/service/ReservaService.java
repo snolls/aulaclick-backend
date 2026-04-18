@@ -11,6 +11,7 @@ import com.aulaclick.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -109,6 +110,7 @@ public class ReservaService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public List<ReservaDTO> getMisReservas(Long idUsuario) {
         return reservaRepository.findByUsuario_IdUsuario(idUsuario)
                 .stream()
