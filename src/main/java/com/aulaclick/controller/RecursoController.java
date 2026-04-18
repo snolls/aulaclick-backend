@@ -68,6 +68,11 @@ public class RecursoController {
                 });
     }
 
+    @PostMapping("/imagenes/batch")
+    public ResponseEntity<List<ImagenGaleria>> registrarImagenesMasivo(@RequestBody List<ImagenRequestDTO> dtos) {
+        return ResponseEntity.ok(galeriaService.registrarImagenesMasivo(dtos));
+    }
+
     @DeleteMapping("/imagenes/{id}")
     public ResponseEntity<Void> eliminarImagen(@PathVariable Long id) {
         galeriaService.eliminarImagen(id);
