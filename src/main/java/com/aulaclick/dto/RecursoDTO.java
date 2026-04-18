@@ -1,6 +1,7 @@
 package com.aulaclick.dto;
 
 import com.aulaclick.entity.Recurso;
+import com.aulaclick.entity.Reserva;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,6 +24,22 @@ public class RecursoDTO {
     private Boolean permiteFinesSemana;
     private LocalTime horaApertura;
     private LocalTime horaCierre;
+    private List<ReservaDTO> reservas;
+
+    private static ReservaDTO reservaToDTO(Reserva r) {
+        ReservaDTO dto = new ReservaDTO();
+        dto.setIdReserva(r.getIdReserva());
+        dto.setFecha(r.getFecha());
+        dto.setHoraInicio(r.getHoraInicio());
+        dto.setHoraFin(r.getHoraFin());
+        dto.setMotivo(r.getMotivo());
+        dto.setEstado(r.getEstado());
+        if (r.getUsuario() != null) {
+            dto.setIdUsuario(r.getUsuario().getIdUsuario());
+            dto.setNombreUsuario(r.getUsuario().getNombreCompleto());
+        }
+        return dto;
+    }
 
     public static RecursoDTO fromEntity(Recurso r) {
         RecursoDTO dto = new RecursoDTO();
@@ -38,6 +55,9 @@ public class RecursoDTO {
         dto.setPermiteFinesSemana(r.getPermiteFinesSemana());
         dto.setHoraApertura(r.getHoraApertura());
         dto.setHoraCierre(r.getHoraCierre());
+        if (r.getReservas() != null) {
+            dto.setReservas(r.getReservas().stream().map(RecursoDTO::reservaToDTO).collect(Collectors.toList()));
+        }
         return dto;
     }
 }

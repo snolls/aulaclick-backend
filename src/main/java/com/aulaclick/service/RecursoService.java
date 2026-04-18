@@ -2,7 +2,7 @@ package com.aulaclick.service;
 
 import com.aulaclick.entity.Recurso;
 import com.aulaclick.repository.RecursoRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +15,7 @@ public class RecursoService {
 
     private final RecursoRepository recursoRepository;
 
+    @Transactional(readOnly = true)
     public List<Recurso> findAll() {
         return recursoRepository.findAll();
     }
@@ -23,6 +24,7 @@ public class RecursoService {
         return recursoRepository.save(recurso);
     }
 
+    @Transactional(readOnly = true)
     public Optional<Recurso> findById(Long id) {
         return recursoRepository.findById(id);
     }
