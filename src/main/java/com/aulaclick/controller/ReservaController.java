@@ -12,7 +12,7 @@ import com.aulaclick.dto.ReservaCrearDTO;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/reservas")
+@RequestMapping("/reservas")
 @RequiredArgsConstructor
 public class ReservaController {
 
