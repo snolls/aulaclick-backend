@@ -39,12 +39,8 @@ public class ReservaController {
         return ResponseEntity.ok(reservaService.getMisReservas(idUsuario));
     }
 
-    @PutMapping("/{idReserva}/cancelar")
-    public ResponseEntity<?> cancelarReserva(@PathVariable Long idReserva) {
-        try {
-            return ResponseEntity.ok(reservaService.cancelarReserva(idReserva));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @PutMapping("/{id}/cancelar")
+    public ResponseEntity<ReservaDTO> cancelarReserva(@PathVariable("id") Long idReserva) {
+        return ResponseEntity.ok(reservaService.cancelarReserva(idReserva));
     }
 }
