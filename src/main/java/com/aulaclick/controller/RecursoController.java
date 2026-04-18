@@ -176,7 +176,7 @@ public class RecursoController {
             recurso.setDepartamento(depto);
             recurso.setEquipamientos(equip);
 
-            return ResponseEntity.ok(RecursoDTO.fromEntity(recursoService.save(recurso)));
+            return ResponseEntity.ok(RecursoDTO.fromEntity(recursoService.actualizarRecurso(recurso)));
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }

@@ -1,6 +1,7 @@
 package com.aulaclick.service;
 
 import com.aulaclick.entity.Recurso;
+import com.aulaclick.entity.Reserva;
 import com.aulaclick.repository.RecursoRepository;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,21 @@ public class RecursoService {
     }
 
     public Recurso save(Recurso recurso) {
+        return recursoRepository.save(recurso);
+    }
+
+    @Transactional
+    public Recurso actualizarRecurso(Recurso recurso) {
+        if (recurso.getEstado() != null && recurso.getEstado().toLowerCase().contains("no disponible")) {
+            if (recurso.getReservas() != null) {
+                for (Reserva reserva : recurso.getReservas()) {
+                    if ("ACTIVA".equalsIgnoreCase(reserva.getEstado())) {
+                        reserva.setEstado("CANCELADA");
+                        reserva.setMotivo("Cancelación automática: El recurso ha pasado a estado No Disponible.");
+                    }
+                }
+            }
+        }
         return recursoRepository.save(recurso);
     }
 
