@@ -5,6 +5,7 @@ import com.aulaclick.dto.RecursoDTO;
 import com.aulaclick.entity.ImagenGaleria;
 import com.aulaclick.entity.Recurso;
 import com.aulaclick.repository.ImagenGaleriaRepository;
+import com.aulaclick.service.GaleriaService;
 import com.aulaclick.service.RecursoService;
 import lombok.RequiredArgsConstructor;
 import com.aulaclick.dto.RecursoCrearDTO;
@@ -37,6 +38,7 @@ import java.util.stream.Collectors;
 public class RecursoController {
 
     private final RecursoService recursoService;
+    private final GaleriaService galeriaService;
     private final ImagenGaleriaRepository imagenGaleriaRepository;
     private final DepartamentoRepository departamentoRepository;
     private final TipoRecursoRepository tipoRecursoRepository;
@@ -63,6 +65,12 @@ public class RecursoController {
                     ImagenGaleria guardada = imagenGaleriaRepository.save(new ImagenGaleria(url));
                     return ResponseEntity.status(HttpStatus.CREATED).body(guardada);
                 });
+    }
+
+    @DeleteMapping("/imagenes/{id}")
+    public ResponseEntity<Void> eliminarImagen(@PathVariable Long id) {
+        galeriaService.eliminarImagen(id);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{id}")
