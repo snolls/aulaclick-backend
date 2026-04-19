@@ -131,9 +131,12 @@ public class ReservaService {
         for (Reserva r : reservas) {
             if ("ACTIVA".equalsIgnoreCase(r.getEstado())) {
                 java.time.LocalDateTime finReserva = java.time.LocalDateTime.of(r.getFecha(), r.getHoraFin());
+                java.time.LocalDateTime inicioReserva = java.time.LocalDateTime.of(r.getFecha(), r.getHoraInicio());
                 if (finReserva.isBefore(ahora)) {
                     r.setEstado("FINALIZADA");
                     hayCambios = true;
+                } else if (inicioReserva.isAfter(ahora) && inicioReserva.isBefore(ahora.plusMinutes(30))) {
+                    r.setEstado("EMPIEZA PRONTO");
                 }
             }
         }
