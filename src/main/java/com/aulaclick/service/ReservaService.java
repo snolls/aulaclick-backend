@@ -135,8 +135,6 @@ public class ReservaService {
                 if (finReserva.isBefore(ahora)) {
                     r.setEstado("FINALIZADA");
                     hayCambios = true;
-                } else if (inicioReserva.isAfter(ahora) && inicioReserva.isBefore(ahora.plusMinutes(30))) {
-                    r.setEstado("EMPIEZA PRONTO");
                 }
             }
         }
@@ -163,7 +161,16 @@ public class ReservaService {
                 dto.setImagenUrl(reserva.getRecurso().getImagen().getUrl());
             }
         }
-        dto.setEstado(reserva.getEstado());
+        String estadoFinal = reserva.getEstado();
+        if ("ACTIVA".equalsIgnoreCase(estadoFinal)) {
+            java.time.ZoneId zonaLocal = java.time.ZoneId.of("Europe/Madrid");
+            java.time.LocalDateTime ahora = java.time.LocalDateTime.now(zonaLocal);
+            java.time.LocalDateTime inicioReserva = java.time.LocalDateTime.of(reserva.getFecha(), reserva.getHoraInicio());
+            if (inicioReserva.isAfter(ahora) && inicioReserva.isBefore(ahora.plusMinutes(30))) {
+                estadoFinal = "EMPIEZA PRONTO";
+            }
+        }
+        dto.setEstado(estadoFinal);
         return dto;
     }
 }
