@@ -165,8 +165,11 @@ public class ReservaService {
         if ("ACTIVA".equalsIgnoreCase(estadoFinal)) {
             java.time.ZoneId zonaLocal = java.time.ZoneId.of("Europe/Madrid");
             java.time.LocalDateTime ahora = java.time.LocalDateTime.now(zonaLocal);
-            java.time.LocalDateTime inicioReserva = java.time.LocalDateTime.of(reserva.getFecha(), reserva.getHoraInicio());
-            if (inicioReserva.isAfter(ahora) && inicioReserva.isBefore(ahora.plusMinutes(30))) {
+            java.time.LocalDateTime inicio = java.time.LocalDateTime.of(reserva.getFecha(), reserva.getHoraInicio());
+            java.time.LocalDateTime fin = java.time.LocalDateTime.of(reserva.getFecha(), reserva.getHoraFin());
+            if (ahora.isAfter(inicio) && ahora.isBefore(fin)) {
+                estadoFinal = "EN CURSO";
+            } else if (inicio.isAfter(ahora) && inicio.isBefore(ahora.plusMinutes(30))) {
                 estadoFinal = "EMPIEZA PRONTO";
             }
         }
