@@ -28,13 +28,6 @@ public class DepartamentoController {
         return departamentoRepository.findAll();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Departamento> getDepartamentoById(@PathVariable Long id) {
-        return departamentoRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
     @PostMapping
     public ResponseEntity<Departamento> crearDepartamento(@RequestBody Departamento departamento) {
         String rol = SecurityUtils.getRol();

@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.util.List;
 
+
 @Entity
 @Table(name = "Usuarios")
 @Getter
@@ -40,7 +41,4 @@ public class Usuario {
 
     @OneToMany(mappedBy = "usuario")
     private List<Reserva> reservas;
-
-    @OneToMany(mappedBy = "usuario")
-    private List<Auditoria> auditorias;
 }
