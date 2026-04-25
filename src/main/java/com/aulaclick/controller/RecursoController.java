@@ -104,6 +104,10 @@ public class RecursoController {
         recurso.setHoraApertura(dto.getHoraApertura() != null ? dto.getHoraApertura() : LocalTime.of(8, 0));
         recurso.setHoraCierre(dto.getHoraCierre() != null ? dto.getHoraCierre() : LocalTime.of(21, 0));
 
+        if ("ADMIN".equals(rol) && dto.getIdSede() != null) {
+            sedeRepository.findById(dto.getIdSede()).ifPresent(recurso::setSede);
+        }
+
         if (dto.getIdImagen() != null) {
             imagenGaleriaRepository.findById(dto.getIdImagen()).ifPresent(recurso::setImagen);
         }
