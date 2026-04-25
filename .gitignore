@@ -1,0 +1,8 @@
+.claude/
+target/
+*.class
+*.jar
+*.war
+*.ear
+.idea/
+*.iml

@@ -1,0 +1,34 @@
+package com.aulaclick.entity;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Entity
+@Table(name = "Departamentos")
+@Getter
+@Setter
+@NoArgsConstructor
+public class Departamento {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_departamento")
+    private Long idDepartamento;
+
+    @Column(name = "nombre", nullable = false)
+    private String nombre;
+
+    @Column(name = "id_sede")
+    private Long sedeId;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "departamento")
+    private List<Recurso> recursos;
+}
