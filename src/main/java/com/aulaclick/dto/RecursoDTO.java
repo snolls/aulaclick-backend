@@ -24,6 +24,8 @@ public class RecursoDTO {
     private LocalTime horaApertura;
     private LocalTime horaCierre;
     private List<ReservaDTO> reservas;
+    private Long sedeId;
+    private String sedeNombre;
 
     public static RecursoDTO fromEntity(Recurso r) {
         RecursoDTO dto = new RecursoDTO();
@@ -39,6 +41,10 @@ public class RecursoDTO {
         dto.setPermiteFinesSemana(r.getPermiteFinesSemana());
         dto.setHoraApertura(r.getHoraApertura());
         dto.setHoraCierre(r.getHoraCierre());
+        if (r.getSede() != null) {
+            dto.setSedeId(r.getSede().getIdSede());
+            dto.setSedeNombre(r.getSede().getNombre());
+        }
         return dto;
     }
 }
