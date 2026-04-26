@@ -31,6 +31,7 @@ public class UsuarioController {
     private final RoleRepository roleRepository;
     private final SedeRepository sedeRepository;
     private final PasswordEncoder passwordEncoder;
+    private final com.aulaclick.repository.ReservaRepository reservaRepository;
 
     @GetMapping
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('ADMIN_SEDE')")
@@ -197,6 +198,7 @@ public class UsuarioController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('ADMIN_SEDE')")
+    @org.springframework.transaction.annotation.Transactional
     public ResponseEntity<Void> eliminarUsuario(@PathVariable Long id) {
         String rolPeticionario = SecurityUtils.getRol();
         Usuario usuario = usuarioRepository.findById(id)
@@ -214,6 +216,8 @@ public class UsuarioController {
             }
         }
 
+        // Eliminar reservas del usuario antes de borrar el usuario (FK constraint)
+        reservaRepository.deleteAllByUsuario_IdUsuario(id);
         usuarioRepository.deleteById(id);
         return ResponseEntity.noContent().build();
     }
