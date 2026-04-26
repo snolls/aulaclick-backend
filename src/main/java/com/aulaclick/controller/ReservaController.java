@@ -43,10 +43,11 @@ public class ReservaController {
 
     @GetMapping("/admin")
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('ADMIN_SEDE')")
-    public ResponseEntity<List<ReservaDTO>> getReservasAdmin() {
+    public ResponseEntity<List<ReservaDTO>> getReservasAdmin(
+            @org.springframework.web.bind.annotation.RequestParam(required = false) Long sedeId) {
         String rol = SecurityUtils.getRol();
-        Long sedeId = "ADMIN_SEDE".equals(rol) ? SecurityUtils.getSedeIdOrForbidden() : null;
-        return ResponseEntity.ok(reservaService.getReservasAdmin(sedeId));
+        Long effectiveSedeId = "ADMIN_SEDE".equals(rol) ? SecurityUtils.getSedeIdOrForbidden() : sedeId;
+        return ResponseEntity.ok(reservaService.getReservasAdmin(effectiveSedeId));
     }
 
     @PutMapping("/{id}/cancelar")

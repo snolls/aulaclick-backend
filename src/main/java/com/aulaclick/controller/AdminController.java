@@ -23,21 +23,29 @@ public class AdminController {
 
     @GetMapping("/estadisticas")
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('ADMIN_SEDE')")
-    public ResponseEntity<EstadisticasDTO> getEstadisticas() {
+    public ResponseEntity<EstadisticasDTO> getEstadisticas(
+            @org.springframework.web.bind.annotation.RequestParam(required = false) Long sedeId) {
         String rol = SecurityUtils.getRol();
         EstadisticasDTO dto = new EstadisticasDTO();
 
         if ("ADMIN".equals(rol)) {
-            dto.setTotalUsuarios(usuarioRepository.count());
-            dto.setTotalRecursos(recursoRepository.count());
-            dto.setTotalReservasActivas(reservaRepository.countByEstado("ACTIVA"));
-            dto.setTotalReservasCanceladas(reservaRepository.countByEstado("CANCELADA"));
+            if (sedeId != null) {
+                dto.setTotalUsuarios(usuarioRepository.countBySedeIdSede(sedeId));
+                dto.setTotalRecursos(recursoRepository.countBySedeIdSede(sedeId));
+                dto.setTotalReservasActivas(reservaRepository.countByEstadoAndRecurso_Sede_IdSede("ACTIVA", sedeId));
+                dto.setTotalReservasCanceladas(reservaRepository.countByEstadoAndRecurso_Sede_IdSede("CANCELADA", sedeId));
+            } else {
+                dto.setTotalUsuarios(usuarioRepository.count());
+                dto.setTotalRecursos(recursoRepository.count());
+                dto.setTotalReservasActivas(reservaRepository.countByEstado("ACTIVA"));
+                dto.setTotalReservasCanceladas(reservaRepository.countByEstado("CANCELADA"));
+            }
         } else {
-            Long sedeId = SecurityUtils.getSedeIdOrForbidden();
-            dto.setTotalUsuarios(usuarioRepository.countBySedeIdSede(sedeId));
-            dto.setTotalRecursos(recursoRepository.countBySedeIdSede(sedeId));
-            dto.setTotalReservasActivas(reservaRepository.countByEstadoAndRecurso_Sede_IdSede("ACTIVA", sedeId));
-            dto.setTotalReservasCanceladas(reservaRepository.countByEstadoAndRecurso_Sede_IdSede("CANCELADA", sedeId));
+            Long mySedeId = SecurityUtils.getSedeIdOrForbidden();
+            dto.setTotalUsuarios(usuarioRepository.countBySedeIdSede(mySedeId));
+            dto.setTotalRecursos(recursoRepository.countBySedeIdSede(mySedeId));
+            dto.setTotalReservasActivas(reservaRepository.countByEstadoAndRecurso_Sede_IdSede("ACTIVA", mySedeId));
+            dto.setTotalReservasCanceladas(reservaRepository.countByEstadoAndRecurso_Sede_IdSede("CANCELADA", mySedeId));
         }
 
         return ResponseEntity.ok(dto);
