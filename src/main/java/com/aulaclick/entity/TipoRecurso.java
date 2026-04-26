@@ -25,9 +25,6 @@ public class TipoRecurso {
     @Column(name = "nombre", nullable = false)
     private String nombre;
 
-    @Column(name = "imagen_url")
-    private String imagenUrl;
-
     @Column(name = "id_sede")
     private Long sedeId;
 
