@@ -88,8 +88,9 @@ public class UsuarioController {
 
         PasswordValidatorUtil.validar(dto.getPassword(), dto.getNombreCompleto(), dto.getEmail());
 
+        // Los ADMIN globales no pertenecen a ninguna sede
         Sede sede = null;
-        if (dto.getIdSede() != null) {
+        if (!"ADMIN".equals(role.getNombreRol()) && dto.getIdSede() != null) {
             sede = sedeRepository.findById(dto.getIdSede())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "La sede seleccionada no existe."));
         }
@@ -142,7 +143,10 @@ public class UsuarioController {
 
         usuario.setRole(nuevoRol);
 
-        if (dto.getIdSede() != null) {
+        // Los ADMIN globales no pertenecen a ninguna sede
+        if ("ADMIN".equals(nuevoRol.getNombreRol())) {
+            usuario.setSede(null);
+        } else if (dto.getIdSede() != null) {
             Sede sede = sedeRepository.findById(dto.getIdSede())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Sede no encontrada."));
             usuario.setSede(sede);
