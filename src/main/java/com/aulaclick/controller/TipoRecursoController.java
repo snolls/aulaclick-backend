@@ -64,7 +64,6 @@ public class TipoRecursoController {
                         }
                     }
                     tipo.setNombre(tipoRecursoDetalles.getNombre());
-                    tipo.setImagenUrl(tipoRecursoDetalles.getImagenUrl());
                     return ResponseEntity.ok(tipoRecursoRepository.save(tipo));
                 })
                 .orElse(ResponseEntity.notFound().build());
