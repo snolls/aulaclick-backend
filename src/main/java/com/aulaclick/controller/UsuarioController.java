@@ -141,6 +141,18 @@ public class UsuarioController {
             }
         }
 
+        // Actualizar nombre y email si se proporcionan
+        if (dto.getNombreCompleto() != null && !dto.getNombreCompleto().isBlank()) {
+            usuario.setNombreCompleto(dto.getNombreCompleto());
+        }
+        if (dto.getEmail() != null && !dto.getEmail().isBlank()
+                && !dto.getEmail().equalsIgnoreCase(usuario.getEmail())) {
+            if (usuarioRepository.findByEmail(dto.getEmail()).isPresent()) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "El email ya está en uso.");
+            }
+            usuario.setEmail(dto.getEmail());
+        }
+
         usuario.setRole(nuevoRol);
 
         // Los ADMIN globales no pertenecen a ninguna sede
