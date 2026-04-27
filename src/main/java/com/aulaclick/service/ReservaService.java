@@ -21,6 +21,11 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+/**
+ * Servicio encargado de la lógica de negocio para la gestión de Reservas.
+ * Gestiona la creación de reservas comprobando solapamientos, validando 
+ * horarios de apertura y restricciones de fines de semana de cada recurso.
+ */
 @Service
 @RequiredArgsConstructor
 public class ReservaService {
@@ -29,6 +34,22 @@ public class ReservaService {
     private final RecursoRepository recursoRepository;
     private final UsuarioRepository usuarioRepository;
 
+    /**
+     * Crea una nueva reserva realizando validaciones complejas de negocio.
+     * Pasos de implementación:
+     * 1. Parsea y valida el formato de las fechas recibidas en el DTO.
+     * 2. Comprueba "viajes en el tiempo" (fechas u horas pasadas).
+     * 3. Verifica que la hora de inicio es anterior a la de fin.
+     * 4. Valida las reglas del recurso (fines de semana, horas de apertura/cierre).
+     * 5. Asegura que no haya solapamientos con reservas existentes en BD.
+     * 
+     * Se usa un ReservaCrearDTO para evitar problemas de persistencia y serialización
+     * con la entidad completa desde el cliente.
+     *
+     * @param dto El objeto de transferencia de datos con la información de la reserva.
+     * @return El DTO de la reserva creada y persistida.
+     * @throws IllegalArgumentException si alguna regla de negocio falla.
+     */
     public ReservaDTO createReserva(ReservaCrearDTO dto) {
         if (dto.getIdRecurso() == null || dto.getIdUsuario() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Se requiere el ID del recurso y del usuario");
@@ -103,6 +124,12 @@ public class ReservaService {
         return toDTO(reservaRepository.save(nuevaReserva));
     }
 
+    /**
+     * Obtiene la lista de reservas asociadas a un recurso específico.
+     * 
+     * @param idRecurso Identificador del recurso.
+     * @return Lista de reservas en formato DTO.
+     */
     public List<ReservaDTO> getReservasByRecurso(Long idRecurso) {
         return reservaRepository.findByRecurso_IdRecurso(idRecurso)
                 .stream()
@@ -110,6 +137,13 @@ public class ReservaService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Obtiene las reservas asociadas a un usuario específico y actualiza 
+     * su estado si han caducado en el tiempo.
+     * 
+     * @param idUsuario Identificador del usuario.
+     * @return Lista de reservas del usuario.
+     */
     @Transactional
     public List<ReservaDTO> getMisReservas(Long idUsuario) {
         List<Reserva> reservas = reservaRepository.findByUsuario_IdUsuario(idUsuario);
@@ -152,6 +186,15 @@ public class ReservaService {
         }
     }
 
+    /**
+     * Transforma una Entidad Reserva a un Data Transfer Object (DTO).
+     * Esta implementación es elegida por optimización para ocultar campos sensibles 
+     * de Usuario y Recurso y para evitar ciclos infinitos en la serialización JSON.
+     * También actualiza dinámicamente estados visuales ("EN CURSO", "EMPIEZA PRONTO").
+     * 
+     * @param reserva La entidad a transformar.
+     * @return El DTO plano.
+     */
     public ReservaDTO toDTO(Reserva reserva) {
         ReservaDTO dto = new ReservaDTO();
         dto.setIdReserva(reserva.getIdReserva());

@@ -12,6 +12,15 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+/**
+ * Entidad principal que representa un recurso (sala, equipo, aula) que puede ser reservado.
+ * 
+ * Atributos especiales introducidos por optimización/dinamismo:
+ * - permiteFinesSemana, horaApertura, horaCierre: Determinan dinámicamente
+ *   las reglas operativas de este recurso para las reservas.
+ * - imagen: Relación con la galería en lugar de campo string, elegido para mantener
+ *   una galería centralizada.
+ */
 @Entity
 @Table(name = "Recursos")
 @Getter
