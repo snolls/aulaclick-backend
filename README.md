@@ -9,7 +9,7 @@ El backend de **AulaClick** es el núcleo del sistema de gestión y reservas de 
   - Spring Web (REST API)
   - Spring Data JPA (Capa de persistencia)
   - Spring Security (Autenticación y Autorización)
-- **Base de Datos:** Relacional (MySQL / PostgreSQL / H2 - *Ver application.properties*)
+- **Base de Datos:** Relacional (MySQL)
 - **Maven** (Gestor de dependencias y ciclo de vida)
 
 ## Arquitectura
