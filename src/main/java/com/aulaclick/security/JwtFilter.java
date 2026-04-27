@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +17,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.List;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
@@ -26,9 +28,7 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain chain) throws ServletException, IOException {
-        System.out.println("=== DEBUG DE SEGURIDAD JWT ===");
         String header = request.getHeader("Authorization");
-        System.out.println("Cabecera Authorization recibida: " + header);
 
         if (header != null && header.startsWith("Bearer ")) {
             String token = header.substring(7);
@@ -44,15 +44,11 @@ public class JwtFilter extends OncePerRequestFilter {
                 );
                 auth.setDetails(claims);
                 SecurityContextHolder.getContext().setAuthentication(auth);
-                System.out.println("Token validado para el usuario: " + username);
-                System.out.println("Autoridades/Roles inyectados en Spring: " + authorities);
+                log.debug("Token validado para el usuario: {}", username);
             } else {
-                System.out.println("Token INVÁLIDO o expirado.");
+                log.debug("Token inválido o expirado.");
             }
-        } else {
-            System.out.println("Sin cabecera Authorization o formato incorrecto.");
         }
-        System.out.println("=================================");
 
         chain.doFilter(request, response);
     }
